@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div class="container">
+            <textarea class="story"></textarea>
+            <button id="set-text" type="button">Set text content</button>
+            <button id="clear-text" type="button">Clear text content</button>
+        </div>
+
+        <div class="container2">
+            <div class="parent">parent</div>
+            <button id="add-child" type="button">Add a child</button>
+            <button id="remove-child" type="buttom">Reomve a child</button>
+        </div>
+    </body>
+
+    <style>
+        .container {
+        display: flex;
+        gap: 0.5rem;
+        flex-direction: column;
+        }
+
+        button {
+        width: 200px;
+        }
+        
+        div.parent {
+        border: 1px solid black;
+        padding: 5px;
+        width: 100px;
+        height: 100px;
+        }
+
+        div.child {
+        border: 1px solid red;
+        margin: 10px;
+        padding: 5px;
+        width: 80px;
+        height: 60px;
+        box-sizing: border-box;
+        }
+
+    </style>
+</html>
