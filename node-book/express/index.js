@@ -57,22 +57,28 @@ app.use((req,res, next) => {
     next();
 })
 
-// handle error - returns a 'not found' message
-// could also: redirect to a different page, log bad requests to file, and more
-app.use((req, res) => {
-    res.status('404').send('not found');
-});
-
+/**  note: EJS in invoked by using the Express Router render() method in a routing function
+ * the render method is passed the name of the template (message),
+ * and an object containing the name/value pairs (in this example, title is set)
+ */
 
 // home page route
 // routing function is defined to handle HTTP GET requests to the root path
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    // res.send('Hello World!'); can't use send with EJS, use .render()
+    res.render('message', { title: 'Hello World!' });
 });
 // a second route
 app.get('/hello', (req, res) => {
-    res.send('Hello from hello path!')
+    // res.send('Hello from hello path!') - use .render() for EJS instead of .send()
+    res.render('message', { title: 'Hello from hello path!' });
 })
+
+// handle error - returns a 'not found' message
+// could also: redirect to a different page, log bad requests to file, and more
+app.use((req, res) => {
+    res.status('404').render('message', { title: 'not found' });
+});
 
 // server static assets - introcuces express middleware
 app.use(express.static(cfg.dir.static));
@@ -89,6 +95,7 @@ export { cfg, app };
 
 /**
  * routing:
+ * 
  * routing determines which functinos express executes when it recieves a request for a specific url (/, /this/path)
  * 
  * one function will return an HTTP responce and stop further processing.
@@ -101,6 +108,7 @@ export { cfg, app };
 
 /**
  * middleware
+ * 
  * typically can run code on every request, manipulate/change req/res objects,
  * terminate a repsonse, call the next middleware function
  * 
@@ -127,4 +135,20 @@ export { cfg, app };
  * - HTML template should do as little as possible at runtime
  * one popular template option is EJS which is what we will use.
  *      npm install ejs
+ */
+
+/**    
+ * advanced routing:
+ * 
+ * more options:
+ * - path expressions: handling many routes with one function
+ * - path paramenters: parsing routes to extract values
+ * - HTTP methods: using GET, POST, DELETE, PUT and so on
+ * - route handlers: grouping related route handler functions into one file
+ * 
+ * routing path parameters:
+ * 
+ * route parameters are named segments that follow a :, which identifies a variable in the URL
+ * ex) '/user/:id' matches any URL starting /user/ like /user/123 or /user/abc
+ * req.params.id would be set to 123 or abc in the examples above
  */
