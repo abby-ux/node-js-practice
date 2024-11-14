@@ -46,6 +46,8 @@ app.disable('x-powered-by');
 // maybe we won't notice now - but always start out trying to get the best performance
 app.use(compression());
 
+app.use(express.static('express'));
+
 // use EJS templates
 // sets EJS and express view engine to files contained in the views directory
 app.set('view engine', 'ejs');
@@ -68,16 +70,23 @@ app.get('/', (req, res) => {
     // res.send('Hello World!'); can't use send with EJS, use .render()
     res.render('message', { title: 'Hello World!' });
 });
-// a second route
-app.get('/hello', (req, res) => {
-    // res.send('Hello from hello path!') - use .render() for EJS instead of .send()
-    res.render('message', { title: 'Hello from hello path!' });
-})
+// // a second route - remove and replace with code because we route is defined elsewhere
+// app.get('/hello', (req, res) => {
+//     // res.send('Hello from hello path!') - use .render() for EJS instead of .send()
+//     res.render('message', { title: 'Hello from hello path!' });
+// })
+
+// /hello route
+import { helloRouter } from './routes/hello.js';
+import { byeRouter } from './routes/goodbye.js';
+app.use('/hello', helloRouter); // app.use() defines the helloRouter middleware
+app.use('/goodbye', byeRouter);
 
 // handle error - returns a 'not found' message
 // could also: redirect to a different page, log bad requests to file, and more
 app.use((req, res) => {
-    res.status('404').render('message', { title: 'not found' });
+    res.status('404').render('message', { title: 'not found' }
+    );
 });
 
 // server static assets - introcuces express middleware
@@ -151,4 +160,11 @@ export { cfg, app };
  * route parameters are named segments that follow a :, which identifies a variable in the URL
  * ex) '/user/:id' matches any URL starting /user/ like /user/123 or /user/abc
  * req.params.id would be set to 123 or abc in the examples above
+ * 
+ * ex) /author/Craig-Buckler/book/Node.js
+ * app.get('/author/:name/book/:bookName', (req, res, next) => {
+ *      console.log(`author: ${ req.params.name }`);
+ *      ... and so on
+ *  next();
+ *  * })
  */
